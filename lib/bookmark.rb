@@ -10,18 +10,20 @@ class Bookmark
       connection = PG.connect(dbname: 'bookmark_manager')
     end
     rs = connection.exec ('SELECT * FROM bookmarks')
+    
     rs.map { |bookmark| bookmark['url']}
   end
 
-  def self.create(address)
+  def self.create(title, address)
     return false unless is_url?(address)
-    #raise 'You must submit a valid URL' unless address =~ /\A#{URI::regexp(['http', 'https'])}\z/
     if ENV['ENVIRONMENT'] == 'test'
       connection = PG.connect(dbname: 'bookmark_manager_test')
     else
       connection = PG.connect(dbname: 'bookmark_manager')
     end
-    connection.exec ("INSERT INTO bookmarks (url) VALUES ('#{address}');")
+    connection.exec ("INSERT INTO bookmarks (title, url) VALUES ('#{title}', '#{address}');")
+    #connection.exec ("INSERT INTO bookmarks (title) VALUES ('#{title}');")
+
   end
 
   private

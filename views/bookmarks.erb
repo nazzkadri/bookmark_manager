@@ -1,4 +1,10 @@
-<%= flash[:notice] %>
+<% flash.keys.each do |type| %>
+  <div data-alert class="flash <%= type %> alert-box radius">
+    <%= flash[type] %>
+    <a href="#" class="close">&times;</a>
+  </div>
+<% end %>
+
 <ul>
   <% @bookmarks.each do |bookmark| %>
     <li><%= bookmark %></li>
@@ -6,6 +12,7 @@
 </ul>
 
 <form action="/bookmarks" method='post'>
+<input type="text" name='title'></input>
 <input type="text" name='url'></input>
 <input type = "submit" value= "Add Bookmark"></input>
 </form>
