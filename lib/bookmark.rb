@@ -14,7 +14,8 @@ class Bookmark
   end
 
   def self.create(address)
-    #return false unless is_url?(address)
+    return false unless is_url?(address)
+    #raise 'You must submit a valid URL' unless address =~ /\A#{URI::regexp(['http', 'https'])}\z/
     if ENV['ENVIRONMENT'] == 'test'
       connection = PG.connect(dbname: 'bookmark_manager_test')
     else
@@ -23,10 +24,10 @@ class Bookmark
     connection.exec ("INSERT INTO bookmarks (url) VALUES ('#{address}');")
   end
 
-  # private
-  #
-  # def self.is_url?(address)
-  #   address =~ /\A#{URI::regexp(['http', 'https'])}\z/
-  # end
+  private
+
+  def self.is_url?(address)
+    address =~ /\A#{URI::regexp(['http', 'https'])}\z/
+  end
 
 end
